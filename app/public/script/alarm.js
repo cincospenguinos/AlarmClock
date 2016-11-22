@@ -24,21 +24,21 @@ function validateAlarm(){
 /**
  * TODO: This
  */
-function addAlarm(){
+function addAlarm(data) {
 
 }
 
 /**
  * TODO This
  */
-function toggleAlarm(){
+function toggleAlarm() {
 
 }
 
 /**
  * TODO This
  */
-function deleteAlarm(){
+function deleteAlarm() {
 
 }
 
@@ -74,4 +74,5 @@ $(document).ready(function(){
 
         $('#form_alert_space').html(alert);
     });
+
 });
