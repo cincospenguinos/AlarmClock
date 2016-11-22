@@ -4,6 +4,16 @@ require 'json'
 require_relative 'models/alarm'
 
 class AlarmApp < Sinatra::Base
+
+  helpers do
+    def send_response(successful, message)
+      resp = {}
+      resp[:successful] = successful
+      resp[:message] = message
+      resp.to_json
+    end
+  end
+
   get '/' do
     erb :index
   end

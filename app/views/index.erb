@@ -28,6 +28,8 @@
               <tr>
                 <th>#</th>
                 <th>Alarm Name</th>
+                <th>Time</th>
+                <th>Repeats</th>
                 <th>Toggle</th>
                 <th>Delete</th>
               </tr>
@@ -37,6 +39,29 @@
               <tr>
                 <td>1</td>
                 <td>Some Alarm</td>
+                <td>5:00 AM</td>
+                <td><div class="btn-group" data-toggle="buttons" id="repeate-1">
+                  <label class="btn btn-default active">
+                    <input type="checkbox" autocomplete="off" checked> Sunday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Monday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Tuesday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Wednesday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Thursday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Friday
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="checkbox" autocomplete="off"> Saturday
+                  </label></div></td>
                 <td><button class="btn btn-success btn-xs" id="toggle-1">ON</button></td>
                 <td><button class="btn-danger btn btn-xs" id="delete-1">DELETE</button></td>
               </tr>
@@ -46,9 +71,10 @@
       </div>
     </div>
 
-    <!--TODO Add an alarm-->
+    <!--Add an alarm-->
     <div class="container">
       <h2>Add Alarm</h2>
+      <div class="col-sm-12" id="form_alert_space"></div>
       <form class="form-horizontal">
         <div class="form-group">
           <label for="form_alarm_name" class="col-sm-2 control-label">Alarm name</label>
@@ -66,6 +92,34 @@
           <label for="form_alarm_time" class="col-sm-2 control-label">Time</label>
           <div class="col-sm-10">
             <input type="time" class="form-control" id="form_alarm_time">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="form_alarm_time" class="col-sm-2 control-label">Repeat</label>
+          <div class="col-sm-10">
+            <div class="btn-group" data-toggle="buttons" id="form_alarm_repeat">
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Sunday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Monday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Tuesday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Wednesday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Thursday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Friday
+              </label>
+              <label class="btn btn-default">
+                <input type="checkbox" autocomplete="off"> Saturday
+              </label>
+            </div>
           </div>
         </div>
         <div class="form-group">
