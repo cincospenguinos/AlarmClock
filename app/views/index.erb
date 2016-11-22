@@ -4,17 +4,50 @@
     <title>Alarm Clock</title>
     <link rel="stylesheet" type="text/css" href="style/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="style/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="style/alarm.css"/>
     <script src="script/lib/jquery.min.js"></script>
     <script src="script/lib/bootstrap.min.js"></script>
+    <script src="script/alarm.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="jumbotron">
         <h1>Alarm Clock</h1>
         <p class="lead">This is a simple application to help my wife and I get up in the morning. If you would
-        like to see the source code, click <a href="">here</a>.</p>
+        like to see the source code, click <a href="https://github.com/cincospenguinos/AlarmClock">here</a>.</p>
       </div>
     </div>
 
+    <!--Modify/Remove Alarms-->
+    <div class="container" id="alarm_space">
+      <h2>Alarms</h2>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Alarm Name</th>
+                <th>Toggle</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Some Alarm</td>
+                <td><button class="btn btn-success btn-xs" id="toggle-1">ON</button></td>
+                <td><button class="btn-danger btn btn-xs" id="delete-1">DELETE</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!--TODO Add an alarm-->
+    <div class="container">
+      <h2>Add Alarm</h2>
+    </div>
   </body>
 </html>
