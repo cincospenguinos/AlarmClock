@@ -84,7 +84,6 @@ function displayAllAlarms(){
         success: function(resp){
             // Let's get all of the alarms
             var alarms = JSON.parse(resp).data.alarms;
-            // console.log(alarms);
 
             // For each alarm
             for(var i = 0; i < alarms.length; i++){
@@ -96,9 +95,8 @@ function displayAllAlarms(){
                 newAlarm.append($('<td>' + alarm.start_date.substring(0, 9) + '</td>')); // Date
                 newAlarm.append($('<td>' + alarm.start_date.substring(11, 16) + '</td>')); // Time
 
-                // All the week buttons
+                // All the repeat buttons
                 var repeatButtons = $('<div/>', { "class":"btn-group", "data-toggle":"buttons", "id":alarm.id})
-
                 for(var j = 0; j < 7; j++){
                     var day = DAYS_OF_WEEK[j];
                     var repeatButtonLabel = $('<label/>', {"class":"btn btn-xs btn-default"});
@@ -109,7 +107,9 @@ function displayAllAlarms(){
                     } else
                         repeatButtonLabel.html('<input type="checkbox" autocomplete="off" />' + day);
 
-                    // TODO: Setup the change repeat buttons to work here
+                    repeatButtonLabel.click(function(){
+                        toggleRepetition(parseInt(alarm.id), day.toLowerCase());
+                    });
 
                     repeatButtons.append(repeatButtonLabel);
                 }
@@ -137,12 +137,18 @@ function displayAllAlarms(){
                 newAlarm.append($('<td/>').append(toggleOnOffButton));
 
                 // The delete button
-                newAlarm.append($('<td/>').append($('<button class="btn btn-danger btn-xs">DELETE</button>')));
+                var deleteButton = $('<button class="btn btn-danger btn-xs">DELETE</button>');
+                deleteButton.click(function(){
+                    deleteAlarm(alarm.id);
+                });
+                newAlarm.append($('<td/>').append(deleteButton));
 
                 alarmTable.append(newAlarm);
             }
         },
-        error: function(){}
+        error: function(){
+            showAlert($('#list_alert_space'), 'A server-side error occurred when trying to get the list of alarms.', 'alert-danger');
+        }
     });
 }
 
@@ -179,34 +185,52 @@ function toggleAlarm(id, button){
 }
 
 /**
- * TODO: This
+ * Toggle the alarm's repetition on a given day.
+ *
  * @param id
  * @param day
  */
-function addRepetition(id, day) {
+function toggleRepetition(id, day){
+    $.ajax({
+        type: 'PUT',
+        url: '/alarm',
+        data: { id:id, day:day},
+        success: function(resp){
+            resp = JSON.parse(resp);
 
+            if(resp.successful){
+            } else {
+                showAlert($('#list_alert_space'), resp.message, 'alert-danger');
+            }
+        },
+        error: function(){
+
+        }
+    });
 }
-
 /**
- * TODO: This
+ * Deletes the alarm matching the id provided.
+ *
  * @param id
- * @param day
- */
-function removeRepetition(id, day) {
-
-}
-
-/**
- * TODO This
  */
 function deleteAlarm(id) {
     $.ajax({
         type: 'DELETE',
         url: '/alarm',
+        data: { id:id },
         success: function(resp){
+            resp = JSON.parse(resp);
 
+            if(resp.successful){
+                displayAllAlarms();
+                showAlert($('#list_alert_space'), 'Alarm deleted.', 'alert-success')
+            } else {
+                showAlert($('#list_alert_space'), resp.message, 'alert-danger');
+            }
         },
-        error: function(){}
+        error: function(){
+            showAlert($('#list_alert_space'), 'A server-side error occurred.', 'alert-danger')
+        }
     });
 }
 
@@ -216,7 +240,6 @@ $(document).ready(function(){
 
     // Setup the add alarm button
     $('#add_alarm').click(function(){
-        var alert;
         var successful = validateAlarm();
 
         if (typeof successful !== 'string') {
@@ -243,10 +266,7 @@ $(document).ready(function(){
 
         } else {
             // Indicate to user what went wrong
-            alert = $('<div/>', { "class":"alert alert-danger" });
-            alert.append($('<strong>' + successful + '</strong>'));
+            showAlert($('#form_alert_space'), successful, 'alert-danger');
         }
-
-        $('#form_alert_space').html(alert);
     });
 });

@@ -15,11 +15,12 @@ class AlarmApp < Sinatra::Base
     end
   end
 
+  ## Shows the index page
   get '/' do
     erb :index
   end
 
-  # TODO Returns all the alarms
+  # Returns all the alarms
   get '/alarms' do
     send_response(true, {:alarms => Alarm.all}, '')
   end
@@ -37,21 +38,44 @@ class AlarmApp < Sinatra::Base
     send_response(true, {}, '')
   end
 
+  ## Toggle the alarm's repetitions
+  put '/alarm' do
+    if params['day']
+      begin
+        alarm = Alarm.first(:id => params['id'].to_i)
+
+        if alarm
+          if alarm.has_weekly_repeat(params['day'].downcase.to_sym)
+            alarm.remove_weekly_repeat(params['day'].downcase.to_sym)
+          else
+            alarm.add_weekly_repeat(params['day'].downcase.to_sym)
+          end
+
+          send_response(true, {}, 'Alarm modified.')
+        else
+          send_response(false, {}, 'No alarm matching the provided ID was found.')
+        end
+      rescue
+        send_response(false, {}, 'The ID provided was not an integer')
+      end
+    else
+      send_response(false, {}, 'There was no day provided.')
+    end
+  end
+
   # Remove an alarm
   delete '/alarm' do
-    alarm = nil
-
     begin
       alarm = Alarm.first(:id => params['id'].to_i)
+
+      if alarm
+        alarm.destroy
+        send_response(true, {}, '')
+      else
+        send_response(false, {}, 'There is no alarm matching that ID')
+      end
     rescue
       send_response(false, {}, 'The ID provided was not an integer')
-    end
-
-    if alarm
-      alarm.destroy
-      send_response(true, {}, '')
-    else
-      send_response(false, {}, 'There is no alarm matching that ID')
     end
   end
 
