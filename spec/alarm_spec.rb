@@ -1,7 +1,7 @@
 require 'rspec'
 require 'dm-mysql-adapter'
 
-require_relative '../app/models/alarm'
+require_relative '../lib/alarm'
 
 describe 'Alarm' do
 

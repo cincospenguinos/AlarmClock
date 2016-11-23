@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'json'
 
-require_relative 'models/alarm'
+require_relative 'alarm'
 
 class AlarmApp < Sinatra::Base
 
