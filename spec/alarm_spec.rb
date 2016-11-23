@@ -5,6 +5,27 @@ require_relative '../app/models/alarm'
 
 describe 'Alarm' do
 
+  def get_today_symbol
+    case DateTime.now.wday
+      when 0
+        :sunday
+      when 1
+        :monday
+      when 2
+        :tuesday
+      when 3
+        :wednesday
+      when 4
+        :thursday
+      when 5
+        :friday
+      when 6
+        :saturday
+      else
+        :nothing
+    end
+  end
+
   before(:all) do
     # DataMapper::Logger.new($stdout, :debug)
     DataMapper.setup(:default, 'mysql://alarm:some_pass@localhost/AlarmClock')
@@ -41,16 +62,20 @@ describe 'Alarm' do
     alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(:sunday)
     expect(alarm.repeat).to include(:sunday)
-    expect(Alarm.first(:id => alarm.id).has_weekly_repeat(:sunday)).to be_truthy
   end
 
-  it 'should remove repeatabled days on request' do
+  it 'should remove repeatable days on request' do
     alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(:sunday)
     expect(alarm.repeat).to include(:sunday)
-    expect(Alarm.first(:id => alarm.id).has_weekly_repeat(:sunday)).to be_truthy
 
     alarm.remove_weekly_repeat(:sunday)
     expect(alarm.has_weekly_repeat(:sunday)).to be_falsey
+  end
+
+  it 'should properly indicate when it is time for the alarm to sound' do
+    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm.add_weekly_repeat(get_today_symbol)
+    expect(alarm.should_sound?).to be_truthy
   end
 end

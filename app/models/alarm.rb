@@ -22,13 +22,13 @@ class Alarm
   def has_weekly_repeat(day_of_week)
     return false unless validate_day_of_week(day_of_week)
     save
-    self.repeat.include?(day_of_week.to_s)
+    self.repeat.include?(day_of_week)
   end
 
   ## Removes the day of week passed
   def remove_weekly_repeat(day_of_week)
     return false unless validate_day_of_week(day_of_week)
-    self.repeat.delete(day_of_week.to_s)
+    self.repeat.delete(day_of_week)
     save
     true
   end
@@ -41,12 +41,45 @@ class Alarm
 
   ## Returns true if it's time for the alarm to sound
   def should_sound?
-    # TODO: This
+    now = DateTime.now
+    return false unless after_start_date?(now)
+    return false unless has_weekly_repeat(wday_to_symbol(now.wday))
+    return false unless now.hour == start_date.hour
+    return false unless now.min == start_date.min
+    true
   end
 
   private
 
   def validate_day_of_week(day)
     [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday].include?(day)
+  end
+
+  def wday_to_symbol(day)
+    case day
+      when 0
+        :sunday
+      when 1
+        :monday
+      when 2
+        :tuesday
+      when 3
+        :wednesday
+      when 4
+        :thursday
+      when 5
+        :friday
+      when 6
+        :saturday
+      else
+        raise RuntimeError, 'Day requested that does not exist! This code should never run.'
+    end
+  end
+
+  def after_start_date?(date)
+    return false if date.year < start_date.year
+    return false if date.month < start_date.month
+    return false if date.yday < start_date.month
+    true
   end
 end

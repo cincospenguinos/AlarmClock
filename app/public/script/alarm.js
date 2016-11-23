@@ -20,6 +20,25 @@ function validateAlarm(){
     if(alarmTime.length === 0)
         return 'Alarm time is required';
 
+    var days = $('#form_alarm_repeat').find('label');
+    var flag = false;
+    for (var i in ['0', '1', '2', '3', '4', '5', '6']) {
+        var day = $(days[i]);
+        if (day.hasClass('active')){
+            flag = true;
+            break;
+        }
+    }
+
+    if(!flag)
+        return 'You must select at least one day for it to repeat';
+
+    for(var j = 0; j < 7; j++){
+        var button = $(repeatButtons[j]);
+        if(button.attr(''))
+            ;
+    }
+
     return true;
 }
 
@@ -121,6 +140,7 @@ function displayAllAlarms(){
 /**
  * Toggles on/off the alarm given.
  * @param id
+ * @param button
  */
 function toggleAlarm(id, button){
     $.ajax({
@@ -154,7 +174,7 @@ function toggleAlarm(id, button){
  * @param id
  * @param day
  */
-function addRepetition(id, day){
+function addRepetition(id, day) {
 
 }
 
@@ -163,7 +183,7 @@ function addRepetition(id, day){
  * @param id
  * @param day
  */
-function removeRepetition(id, day){
+function removeRepetition(id, day) {
 
 }
 
