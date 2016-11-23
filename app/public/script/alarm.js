@@ -3,6 +3,12 @@
  */
 var DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+function showAlert(space, message, alertTypeClass){
+    var alert = $('<div/>', { "class":"alert"});
+    alert.addClass(alertTypeClass);
+    alert.html('<strong>' + message + '</strong>');
+    space.html(alert);
+}
 
 /**
  * Returns a string indicating the issue if validation is unsuccessful,
@@ -33,12 +39,6 @@ function validateAlarm(){
     if(!flag)
         return 'You must select at least one day for it to repeat';
 
-    for(var j = 0; j < 7; j++){
-        var button = $(repeatButtons[j]);
-        if(button.attr(''))
-            ;
-    }
-
     return true;
 }
 
@@ -48,17 +48,27 @@ function validateAlarm(){
 function addAlarm(data) {
     $.ajax({
         type: 'POST',
-        url: '/add',
+        url: '/alarm',
         data: data,
         success: function(resp){
-            displayAllAlarms();
+            resp = JSON.parse(resp);
+
+            if(resp.successful){
+                displayAllAlarms();
+                $('#form_alarm_name').val('');
+                $('#form_alarm_date').val('');
+                $('#form_alarm_time').val('');
+                showAlert($('#form_alert_space'), 'Alarm added.', 'alert-success')
+            } else {
+
+            }
         },
         error: function(){
-            var alert = $('<div/>', { "class":"alert alert-danger" });
-            alert.append($('<strong>Server side error</strong>'));
-            $('#form_alert_space').html(alert);
+            showAlert($('#form_alert_space'), 'A server-side error occurred.', 'alert-danger');
         }
     });
+
+    displayAllAlarms();
 }
 
 /**
@@ -110,7 +120,6 @@ function displayAllAlarms(){
                 var toggleOnOffButton = $('<button class="btn btn-xs"></button>');
                 toggleOnOffButton.attr('id', 'toggle-' + alarm.id);
 
-
                 if(alarm.is_on) {
                     toggleOnOffButton.addClass('btn-success');
                     toggleOnOffButton.html('ON');
@@ -122,7 +131,7 @@ function displayAllAlarms(){
                 toggleOnOffButton.click(function(evt){
                     var button = $(evt.target);
                     var id = button.attr('id');
-                    toggleAlarm(id.substring(id.length - 1, id.length), button);
+                    toggleAlarm(parseInt(id.match(/[0-9]+/g)), button);
                 });
 
                 newAlarm.append($('<td/>').append(toggleOnOffButton));
@@ -160,7 +169,7 @@ function toggleAlarm(id, button){
                     button.html('ON');
                 }
             } else {
-                // TODO: Inform the user
+                showAlert($('#list_alert_space'), resp.message, 'alert-danger');
             }
         },
         error: function(){
@@ -190,8 +199,15 @@ function removeRepetition(id, day) {
 /**
  * TODO This
  */
-function deleteAlarm() {
+function deleteAlarm(id) {
+    $.ajax({
+        type: 'DELETE',
+        url: '/alarm',
+        success: function(resp){
 
+        },
+        error: function(){}
+    });
 }
 
 $(document).ready(function(){
@@ -224,13 +240,6 @@ $(document).ready(function(){
                 time: alarmTime,
                 repetitions: reps
             });
-
-            alert = $('<div/>', { "class":"alert alert-success"});
-            alert.append($('<strong>Alarm added</strong>'));
-
-            $('#form_alarm_name').val('');
-            $('#form_alarm_date').val('');
-            $('#form_alarm_time').val('');
 
         } else {
             // Indicate to user what went wrong

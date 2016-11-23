@@ -25,7 +25,7 @@ class AlarmApp < Sinatra::Base
   end
 
   ## Add an alarm
-  post '/add' do
+  post '/alarm' do
     # TODO: Validation!
     date = DateTime.strptime("#{params['date']}T#{params['time']}", '%Y-%m-%dT%H:%M')
     alarm = Alarm.create(:name => params['name'], :start_date => date)
@@ -37,20 +37,39 @@ class AlarmApp < Sinatra::Base
     send_response(true, {}, '')
   end
 
-  # TODO Remove an alarm
-  post '/delete' do
+  # Remove an alarm
+  delete '/alarm' do
+    alarm = nil
 
-  end
-
-  # TODO Toggle an alarm's state
-  put '/toggle' do
-    alarm = Alarm.first(:id => params['id'].to_i)
+    begin
+      alarm = Alarm.first(:id => params['id'].to_i)
+    rescue
+      send_response(false, {}, 'The ID provided was not an integer')
+    end
 
     if alarm
-      alarm.toggle
+      alarm.destroy
       send_response(true, {}, '')
     else
       send_response(false, {}, 'There is no alarm matching that ID')
+    end
+  end
+
+  # Toggle an alarm's state
+  put '/toggle' do
+    alarm = nil
+
+    begin
+      alarm = Alarm.first(:id => params['id'].to_i)
+      if alarm
+        alarm.toggle
+        send_response(true, {}, '')
+      else
+        puts "PARAMS ID: #{params['id'].to_i}"
+        send_response(false, {}, 'There is no alarm matching that ID')
+      end
+    rescue
+      send_response(false, {}, 'The ID provided was not an integer')
     end
   end
 end
