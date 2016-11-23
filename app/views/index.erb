@@ -14,7 +14,7 @@
       <div class="jumbotron">
         <h1>Alarm Clock</h1>
         <p class="lead">This is a simple application to help my wife and I get up in the morning. If you would
-        like to see the source code, click <a href="https://github.com/cincospenguinos/AlarmClock">here</a>.</p>
+        like to see the source code, click <a href="https://github.com/cincospenguinos/AlarmClock" target="_blank">here</a>.</p>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Alarm Name</th>
                 <th>Date Started</th>
                 <th>Time</th>
@@ -35,38 +35,7 @@
                 <th>Delete</th>
               </tr>
             </thead>
-            <tbody>
-              <!--TODO: Remove this. This is meant only to be an example.-->
-              <tr>
-                <td>1</td>
-                <td>Some Alarm</td>
-                <td>12 Dec 2016</td>
-                <td>5:00 AM</td>
-                <td><div class="btn-group" data-toggle="buttons" id="repeat-1">
-                  <label class="btn btn-xs btn-default active">
-                    <input type="checkbox" autocomplete="off" checked> Sunday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Monday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Tuesday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Wednesday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Thursday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Friday
-                  </label>
-                  <label class="btn btn-xs btn-default">
-                    <input type="checkbox" autocomplete="off"> Saturday
-                  </label></div></td>
-                <td><button class="btn btn-success btn-xs" id="toggle-1">ON</button></td>
-                <td><button class="btn-danger btn btn-xs" id="delete-1">DELETE</button></td>
-              </tr>
+            <tbody id="alarm_table">
             </tbody>
           </table>
         </div>
