@@ -1,5 +1,8 @@
 # This is a simple executable ruby file meant to play some playlist.
-require_relative 'lib/alarm'
+require 'audite'
+require 'data_mapper'
+
+require_relative 'lib/models/alarm'
 
 def get_today
   case DateTime.now.wday
@@ -22,9 +25,15 @@ def get_today
   end
 end
 
-Alarm.all.each do |alarm|
-  if alarm.should_sound?
-    # TODO: Sound the alarm!
-    break
-  end
-end
+DataMapper.setup(:default, 'mysql://alarm:some_pass@localhost/AlarmClock')
+DataMapper.finalize
+DataMapper.auto_upgrade!
+
+player = Audite.new
+
+# Alarm.all.each do |alarm|
+#   if alarm.should_sound?
+#     # TODO: Sound the alarm!
+#     break
+#   end
+# end
