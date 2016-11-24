@@ -13,7 +13,7 @@ class Alarm
   ## Add a day of the week that this alarm should be repeated
   def add_weekly_repeat(day_of_week)
     return false unless validate_day_of_week(day_of_week)
-    self.repeat.push(day_of_week) unless self.repeat.include?(day_of_week)
+    self.repeat.push(day_of_week) unless has_weekly_repeat(day_of_week)
     save
     true
   end
@@ -22,7 +22,7 @@ class Alarm
   def has_weekly_repeat(day_of_week)
     return false unless validate_day_of_week(day_of_week)
     save
-    self.repeat.include?(day_of_week)
+    self.repeat.include?(day_of_week.to_s) || self.repeat.include?(day_of_week)
   end
 
   ## Removes the day of week passed
@@ -77,9 +77,9 @@ class Alarm
   end
 
   def after_start_date?(date)
-    return false if date.year < start_date.year
-    return false if date.month < start_date.month
-    return false if date.yday < start_date.month
-    true
+    return true if date.year >= start_date.year
+    return true if date.month >= start_date.month
+    return true if date.yday >= start_date.yday
+    false
   end
 end

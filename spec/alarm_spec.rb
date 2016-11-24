@@ -76,6 +76,7 @@ describe 'Alarm' do
   it 'should properly indicate when it is time for the alarm to sound' do
     alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(get_today_symbol)
+    expect(alarm.has_weekly_repeat(get_today_symbol)).to be_truthy
     expect(alarm.should_sound?).to be_truthy
   end
 end

@@ -9,4 +9,4 @@ gem 'json'
 gem 'rake'
 gem 'rspec'
 gem 'curses' # Required for audite
-gem 'audite', path: ''
+gem 'audite'

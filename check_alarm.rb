@@ -29,11 +29,18 @@ DataMapper.setup(:default, 'mysql://alarm:some_pass@localhost/AlarmClock')
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
+
+
 player = Audite.new
 
-# Alarm.all.each do |alarm|
-#   if alarm.should_sound?
-#     # TODO: Sound the alarm!
-#     break
-#   end
-# end
+Alarm.all.each do |alarm|
+  puts "#{alarm.start_date}"
+
+  if alarm.should_sound?
+    puts 'Alarm should sound!'
+    player.load('/Users/andre/Desktop/audite_testing/playlist/linoleum.mp3')
+    player.start_stream
+    player.thread.join
+    break
+  end
+end

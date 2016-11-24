@@ -1,7 +1,7 @@
 require 'data_mapper'
 require 'dm-migrations'
 
-require_relative 'app/alarm_app'
+require_relative 'lib/alarm_app'
 
 # Setup datamapper bullshilogna
 # DataMapper::Logger.new($stdout, :debug)
