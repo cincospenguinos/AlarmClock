@@ -1,7 +1,7 @@
 require 'data_mapper'
 require 'dm-types'
 
-class Alarm
+class AlarmClock
   include DataMapper::Resource
 
   property :id, Serial

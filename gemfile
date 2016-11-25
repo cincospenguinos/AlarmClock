@@ -8,5 +8,3 @@ gem 'dm-mysql-adapter'
 gem 'json'
 gem 'rake'
 gem 'rspec'
-gem 'curses' # Required for audite
-gem 'audite'

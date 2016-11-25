@@ -1,7 +1,7 @@
 require 'rspec'
 require 'dm-mysql-adapter'
 
-require_relative '../lib/models/alarm'
+require_relative '../lib/alarm_clock'
 
 describe 'Alarm' do
 
@@ -35,37 +35,37 @@ describe 'Alarm' do
   end
 
   after(:all) do
-    Alarm.destroy!
+    AlarmClock.destroy!
   end
 
   it 'should be creatable' do
-    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
-    alarm = Alarm.first(:id => alarm.id)
+    alarm = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm = AlarmClock.first(:id => alarm.id)
     expect(alarm).to be_truthy
     expect(alarm.name).to eq('Some alarm')
   end
 
   it 'should be destroyable' do
-    alarm_id = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now).id
-    Alarm.first(:id => alarm_id).destroy
-    expect(Alarm.first(:id => alarm_id)).to be_falsey
+    alarm_id = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now).id
+    AlarmClock.first(:id => alarm_id).destroy
+    expect(AlarmClock.first(:id => alarm_id)).to be_falsey
   end
 
   it 'should able to be toggled' do
-    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.toggle
     expect(alarm.is_on).to be_falsey
-    expect(Alarm.first(:id => alarm.id).is_on).to be_falsey
+    expect(AlarmClock.first(:id => alarm.id).is_on).to be_falsey
   end
 
   it 'should take repeatable days' do
-    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(:sunday)
     expect(alarm.repeat).to include(:sunday)
   end
 
   it 'should remove repeatable days on request' do
-    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(:sunday)
     expect(alarm.repeat).to include(:sunday)
 
@@ -74,7 +74,7 @@ describe 'Alarm' do
   end
 
   it 'should properly indicate when it is time for the alarm to sound' do
-    alarm = Alarm.create(:name => 'Some alarm', :start_date => DateTime.now)
+    alarm = AlarmClock.create(:name => 'Some alarm', :start_date => DateTime.now)
     alarm.add_weekly_repeat(get_today_symbol)
     expect(alarm.has_weekly_repeat(get_today_symbol)).to be_truthy
     expect(alarm.should_sound?).to be_truthy
