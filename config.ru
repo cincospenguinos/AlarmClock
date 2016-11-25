@@ -4,7 +4,6 @@ require 'dm-migrations'
 
 require_relative 'app/alarm_app'
 
-# Configure DataMapper
 begin
   config = YAML.load_file('alarm_config.yml')
 
@@ -12,7 +11,7 @@ begin
   DataMapper.finalize
   DataMapper.auto_upgrade!
 rescue
-  puts 'There is an issue with the config file. Ensure that alarm_config is setup properly.'
+  puts 'The database or config file may not be setup properly. Ensure these things are in order.'
   exit 1
 end
 
