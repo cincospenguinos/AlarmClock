@@ -1,0 +1,6 @@
+---
+schema: 'AlarmClock'
+adapter: 'mysql'
+username: 'alarm'
+password: 'some_pass'
+location: 'localhost'
