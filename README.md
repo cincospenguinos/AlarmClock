@@ -21,14 +21,12 @@ password
 
 ## How can I help out?
 
-I am not a Javascript programmer. I know just enough to get by. If you think you have
-the chops to make it look/act a lot better than it does, feel free to fix it up!
-
 If you have found a bug, please submit an issue via GitHub with very clear and precise
 instructions on reproducing the bug. I'll look into it as soon as I can.
 
-If there is an issue or something you would want to add to the application, feel
-free to throw that together too. Simply follow the following procedure:
+If there is an issue you can fix, or you would like to add some test cases,
+or something you would want to add to the application, feel free to throw that 
+together too. Simply do the following:
 
 1. Fork the repo
 2. Make your changes
