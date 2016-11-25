@@ -5,7 +5,7 @@ require 'dm-migrations'
 require_relative 'app/alarm_app'
 
 begin
-  config = YAML.load_file('alarm_config.yml')
+  config = YAML.load_file('alarm_config.yml')['prod']
 
   DataMapper.setup(:default, "#{config['adapter']}://#{config['username']}:#{config['password']}@#{config['location']}/#{config['schema']}")
   DataMapper.finalize
