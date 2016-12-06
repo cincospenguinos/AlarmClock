@@ -1,6 +1,8 @@
 /**
  * Manages all of the client side alarm modification stuffs
  */
+// TODO: The dates all have the last number cut off. Maybe fix how the dates appear
+
 var DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function showAlert(space, message, alertTypeClass){
