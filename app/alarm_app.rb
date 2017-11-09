@@ -5,7 +5,7 @@ require 'yaml'
 require_relative '../lib/alarm'
 require_relative '../lib/alarm_migration'
 
-db_config = YAML::load(File.open('db_config.yml'))
+db_config = YAML::load(File.open('config/db_config.yml'))
 
 ActiveRecord::Base.establish_connection(db_config)
 
