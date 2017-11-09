@@ -2,6 +2,16 @@ require 'sinatra'
 require 'json'
 
 require_relative '../lib/alarm_clock'
+require_relative '../lib/alarm_migration'
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'sqlite3',
+  database: '.alarm_clock.db'
+)
+
+if !ActiveRecord::Base.connection.table_exists?(:alarms)
+  AlarmMigration.new.up
+end
 
 helpers do
   def send_response(successful, data, message)
@@ -18,79 +28,33 @@ get '/' do
   erb :index
 end
 
-# Returns all the alarms
+## Returns all the alarms
 get '/alarms' do
-  send_response(true, {:alarms => AlarmClock.all}, '')
+  # TODO: This
+  send_response(false, {}, '')
 end
 
 ## Add an alarm
 post '/alarm' do
-  # TODO: Validation!
-  date = DateTime.strptime("#{params['date']}T#{params['time']}", '%Y-%m-%dT%H:%M')
-  alarm = AlarmClock.create(:name => params['name'], :start_date => date)
+  repetitions = {}
 
-  params['repetitions'].each do |day|
-    alarm.add_weekly_repeat(day.downcase.to_sym)
-  end
+  
 
-  send_response(true, {}, '')
+  alarm = Alarm.new(name: params['name'], alarm_time: params['time'], repetitions: {}.to_json)
+  send_response(false, {}, 'Not yet implemented')
 end
 
 ## Toggle the alarm's repetitions
 put '/alarm' do
-  if params['day']
-    begin
-      alarm = AlarmClock.first(:id => params['id'].to_i)
-
-      if alarm
-        if alarm.has_weekly_repeat(params['day'].downcase.to_sym)
-          alarm.remove_weekly_repeat(params['day'].downcase.to_sym)
-        else
-          alarm.add_weekly_repeat(params['day'].downcase.to_sym)
-        end
-
-        send_response(true, {}, 'Alarm modified.')
-      else
-        send_response(false, {}, 'No alarm matching the provided ID was found.')
-      end
-    rescue
-      send_response(false, {}, 'The ID provided was not an integer')
-    end
-  else
-    send_response(false, {}, 'There was no day provided.')
-  end
+    # TODO: This
 end
 
-# Remove an alarm
+## Remove an alarm
 delete '/alarm' do
-  begin
-    alarm = AlarmClock.first(:id => params['id'].to_i)
-
-    if alarm
-      alarm.destroy
-      send_response(true, {}, '')
-    else
-      send_response(false, {}, 'There is no alarm matching that ID')
-    end
-  rescue
-    send_response(false, {}, 'The ID provided was not an integer')
-  end
+  # TODO: This
 end
 
-# Toggle an alarm's state
+## Toggle an alarm's state
 put '/toggle' do
-  alarm = nil
-
-  begin
-    alarm = AlarmClock.first(:id => params['id'].to_i)
-    if alarm
-      alarm.toggle
-      send_response(true, {}, '')
-    else
-      puts "PARAMS ID: #{params['id'].to_i}"
-      send_response(false, {}, 'There is no alarm matching that ID')
-    end
-  rescue
-    send_response(false, {}, 'The ID provided was not an integer')
-  end
+  # TODO: This
 end

@@ -18,13 +18,10 @@ function showAlert(space, message, alertTypeClass){
  */
 function validateAlarm(){
     var alarmName = $('#form_alarm_name').val();
-    var alarmDate = $('#form_alarm_date').val();
     var alarmTime = $('#form_alarm_time').val();
 
     if(alarmName.length === 0)
         return 'Alarm name is required';
-    if(alarmDate.length === 0)
-        return 'Alarm date is required';
     if(alarmTime.length === 0)
         return 'Alarm time is required';
 
@@ -58,7 +55,6 @@ function addAlarm(data) {
             if(resp.successful){
                 displayAllAlarms();
                 $('#form_alarm_name').val('');
-                $('#form_alarm_date').val('');
                 $('#form_alarm_time').val('');
                 showAlert($('#form_alert_space'), 'Alarm added.', 'alert-success')
             } else {
@@ -246,7 +242,6 @@ $(document).ready(function(){
 
         if (typeof successful !== 'string') {
             var alarmName = $('#form_alarm_name').val();
-            var alarmDate = $('#form_alarm_date').val();
             var alarmTime = $('#form_alarm_time').val();
             var reps = [];
 
@@ -261,7 +256,6 @@ $(document).ready(function(){
 
             addAlarm({
                 name: alarmName,
-                date: alarmDate,
                 time: alarmTime,
                 repetitions: reps
             });

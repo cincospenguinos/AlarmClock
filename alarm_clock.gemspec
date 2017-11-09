@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'alarm_clock'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2016-11-25'
   s.summary     = 'Simple alarm clock application'
   s.description = 'A simple web application that manages alarms.'

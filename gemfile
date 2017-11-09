@@ -1,10 +1,17 @@
 source 'https://rubygems.org'
 
+# For sinatra, our web app
 gem 'sinatra'
 gem 'rack'
-gem 'data_mapper'
-gem 'dm-types'
-gem 'dm-mysql-adapter'
+
+# For our ORM, Active Record
+gem 'activerecord'
+gem 'logger'
+gem 'sqlite3'
+
+# To facilitate easy communication with the client
 gem 'json'
+
+# Because I said so
 gem 'rake'
 gem 'rspec'
