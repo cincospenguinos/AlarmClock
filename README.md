@@ -2,6 +2,10 @@
 
 This is a simple web application to help my wife and I get up in the morning. 
 
+## TODO
+
+- [ ] Figure out a nice way to figure out what alarms 
+
 ## Installing and Running
 
 1. Clone this repository

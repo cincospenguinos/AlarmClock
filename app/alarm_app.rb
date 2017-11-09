@@ -2,6 +2,8 @@ require 'sinatra'
 require 'json'
 require 'yaml'
 
+require 'byebug'
+
 require_relative '../lib/alarm'
 require_relative '../lib/alarm_migration'
 
@@ -22,6 +24,7 @@ helpers do
       alarms.each do |a|
         a.alarm_time = a.alarm_time.localtime
       end
+      byebug
     end
 
     alarms
