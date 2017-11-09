@@ -58,10 +58,27 @@ post '/alarm' do
   end
 end
 
-## Toggle the alarm's repetitions
+## Toggle the alarm's days
 put '/alarm' do
-    # TODO: This
-  send_response(false, {}, 'Not implemented')
+  alarm = Alarm.find(params['id'])
+
+  if alarm.nil?
+    send_response(false, {}, 'Could not find alarm!')
+  else
+    days = JSON.parse(alarm.days)
+
+    if days.include?(params['day'])
+      days.delete(params['day'])
+    else
+      days << params['day']
+    end
+
+    alarm.days = days.to_json
+    alarm.save!
+
+    puts "---> #{alarm.inspect}"
+    send_response(true, {}, '')
+  end
 end
 
 ## Remove an alarm

@@ -89,7 +89,7 @@ function displayAllAlarms(){
                 var alarm = alarms[i];
                 alarm.days = JSON.parse(alarm.days);
 
-                var newAlarm = $('<tr>');
+                var newAlarm = $('<tr id=alarm_' + alarm.id + '>');
                 newAlarm.append($('<td>' + alarm.id +'</td>'));
                 newAlarm.append($('<td>' + alarm.name + '</td>'));
                 newAlarm.append($('<td>' + alarm.alarm_time.substring(11, 16) + '</td>'))
@@ -102,12 +102,14 @@ function displayAllAlarms(){
 
                     if(alarm.days.includes(day)) {
                         repeatButtonLabel.addClass('active');
-                        repeatButtonLabel.html('<input type="checkbox" autocomplete="off" checked/>' + day);
+                        repeatButtonLabel.html('<input type="checkbox" autocomplete="off" checked>' + day + '</input>');
                     } else
-                        repeatButtonLabel.html('<input type="checkbox" autocomplete="off" />' + day);
+                        repeatButtonLabel.html('<input type="checkbox" autocomplete="off">' + day + '</input>');
 
-                    repeatButtonLabel.click(function(){
-                        toggleRepetition(parseInt(alarm.id), day.toLowerCase());
+                    repeatButtonLabel.click(function() {
+                        // This is super ugly, but I needed a way to get the ID of this alarm and send it back to the server
+                        var alarmId = $(this).parent().parent().parent().attr('id').replace('alarm_', '');
+                        toggleRepetition($(this).parent().parent().parent().attr('id').replace('alarm_', ''), this.innerText);
                     });
 
                     repeatButtons.append(repeatButtonLabel);
