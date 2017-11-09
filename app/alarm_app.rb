@@ -1,12 +1,13 @@
 require 'sinatra'
 require 'json'
+require 'byebug'
 
-require_relative '../lib/alarm_clock'
+require_relative '../lib/alarm'
 require_relative '../lib/alarm_migration'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
-  database: '.alarm_clock.db'
+  database: '.alarms.db'
 )
 
 if !ActiveRecord::Base.connection.table_exists?(:alarms)
@@ -30,18 +31,31 @@ end
 
 ## Returns all the alarms
 get '/alarms' do
-  # TODO: This
-  send_response(false, {}, '')
+  send_response(false, { alarms: Alarm.all }, '')
 end
 
 ## Add an alarm
 post '/alarm' do
-  repetitions = {}
+  days = []
 
-  
+  params['days'].each do |day|
+    days << day
+  end
 
-  alarm = Alarm.new(name: params['name'], alarm_time: params['time'], repetitions: {}.to_json)
-  send_response(false, {}, 'Not yet implemented')
+  time = Time.parse(params['time'])
+  puts "---> #{time.inspect}"
+
+  if days.size == 0
+    send_response(false, {}, 'Must have multiple days')
+  else
+    alarm = Alarm.new(name: params['name'], alarm_time: time, days: days.to_json)
+    if alarm.valid?
+      alarm.save!
+      send_response(true, { alarms: Alarm.all }, '')
+    else
+      send_response(false, {}, 'Alarm not valid!')
+    end
+  end
 end
 
 ## Toggle the alarm's repetitions

@@ -3,9 +3,10 @@ source 'https://rubygems.org'
 # For sinatra, our web app
 gem 'sinatra'
 gem 'rack'
+gem 'puma'
 
 # For our ORM, Active Record
-gem 'activerecord'
+gem 'activerecord', '~>5.1'
 gem 'logger'
 gem 'sqlite3'
 

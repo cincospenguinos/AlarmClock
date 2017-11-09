@@ -82,6 +82,7 @@ function displayAllAlarms(){
         success: function(resp){
             // Let's get all of the alarms
             var alarms = JSON.parse(resp).data.alarms;
+            console.log(JSON.parse(resp).data.alarms);
 
             // For each alarm
             for(var i = 0; i < alarms.length; i++){
@@ -90,8 +91,7 @@ function displayAllAlarms(){
                 var newAlarm = $('<tr>');
                 newAlarm.append($('<td>' + alarm.id +'</td>'));
                 newAlarm.append($('<td>' + alarm.name + '</td>'));
-                newAlarm.append($('<td>' + alarm.start_date.substring(0, 9) + '</td>')); // Date
-                newAlarm.append($('<td>' + alarm.start_date.substring(11, 16) + '</td>')); // Time
+                newAlarm.append($('<td>' + alarm.alarm_time.substring(11, 16) + '</td>'))
 
                 // All the repeat buttons
                 var repeatButtons = $('<div/>', { "class":"btn-group", "data-toggle":"buttons", "id":alarm.id})
@@ -99,7 +99,7 @@ function displayAllAlarms(){
                     var day = DAYS_OF_WEEK[j];
                     var repeatButtonLabel = $('<label/>', {"class":"btn btn-xs btn-default"});
 
-                    if(alarm.repeat.includes(day.toLowerCase())) {
+                    if(alarm.days.includes(day.toLowerCase())) {
                         repeatButtonLabel.addClass('active');
                         repeatButtonLabel.html('<input type="checkbox" autocomplete="off" checked/>' + day);
                     } else
@@ -257,7 +257,7 @@ $(document).ready(function(){
             addAlarm({
                 name: alarmName,
                 time: alarmTime,
-                repetitions: reps
+                days: reps
             });
 
         } else {

@@ -2,3 +2,4 @@
 Gemfile.lock
 .idea*.db
 .?*.db
+.byebug_history
