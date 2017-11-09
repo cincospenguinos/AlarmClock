@@ -15,6 +15,19 @@ if !ActiveRecord::Base.connection.table_exists?(:alarms)
 end
 
 helpers do
+  def all_alarms
+    alarms = nil
+
+    ActiveRecord::Base.connection_pool.with_connection do
+      alarms = Alarm.all
+      alarms.each do |a|
+        a.alarm_time = a.alarm_time.localtime
+      end
+    end
+
+    alarms
+  end
+
   def send_response(successful, data, message)
     resp = {}
     resp[:successful] = successful
@@ -31,7 +44,7 @@ end
 
 ## Returns all the alarms
 get '/alarms' do
-  send_response(true, { alarms: Alarm.all }, '')
+  send_response(true, { alarms: all_alarms }, '')
 end
 
 ## Add an alarm
@@ -42,16 +55,16 @@ post '/alarm' do
     days << day
   end
 
+  now = Time.now
   time = Time.parse(params['time'])
+  time = Time.mktime(now.year, now.month, now.day, time.hour, time.min)
 
-  if days.size == 0
-    send_response(false, {}, 'Must have multiple days')
-  else
-    alarm = Alarm.new(name: params['name'], alarm_time: time, days: days.to_json)
+  ActiveRecord::Base.connection_pool.with_connection do
+    alarm = Alarm.new(name: params['name'], alarm_time: time.localtime, days: days.to_json)
 
     if alarm.valid?
       alarm.save!
-      send_response(true, { alarms: Alarm.all }, '')
+      send_response(true, { alarms: all_alarms }, '')
     else
       send_response(false, {}, 'Alarm not valid!')
     end
@@ -60,35 +73,51 @@ end
 
 ## Toggle the alarm's days
 put '/alarm' do
-  alarm = Alarm.find(params['id'])
+  ActiveRecord::Base.connection_pool.with_connection do
+    alarm = Alarm.find(params['id'])
 
-  if alarm.nil?
-    send_response(false, {}, 'Could not find alarm!')
-  else
-    days = JSON.parse(alarm.days)
-
-    if days.include?(params['day'])
-      days.delete(params['day'])
+    if alarm.nil?
+      send_response(false, {}, 'Could not find alarm!')
     else
-      days << params['day']
+      days = JSON.parse(alarm.days)
+
+      if days.include?(params['day'])
+        days.delete(params['day'])
+      else
+        days << params['day']
+      end
+
+      alarm.days = days.to_json
+      alarm.save!
+
+      send_response(true, {}, '')
     end
-
-    alarm.days = days.to_json
-    alarm.save!
-
-    puts "---> #{alarm.inspect}"
-    send_response(true, {}, '')
   end
 end
 
 ## Remove an alarm
 delete '/alarm' do
   # TODO: This
-  send_response(false, {}, 'Not implemented')
+  id = params['id']
+  id = id.to_i if id.is_a?(String)
+
+  ActiveRecord::Base.connection_pool.with_connection do
+    Alarm.destroy(id)
+  end
+
+  send_response(true, {}, 'Deleted.')
 end
 
 ## Toggle an alarm's state
 put '/toggle' do
-  # TODO: This
-  send_response(false, {}, 'Not implemented')
+  id = params['id']
+  id = id.to_i if id.is_a?(String)
+
+  ActiveRecord::Base.connection_pool.with_connection do
+    alarm = Alarm.find(id)
+    alarm.enabled = !alarm.enabled
+    alarm.save!
+  end
+  
+  send_response(true, {}, 'Toggled.')
 end

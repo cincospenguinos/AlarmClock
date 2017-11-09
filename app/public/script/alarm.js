@@ -65,8 +65,6 @@ function addAlarm(data) {
             showAlert($('#form_alert_space'), 'A server-side error occurred.', 'alert-danger');
         }
     });
-
-    displayAllAlarms();
 }
 
 /**
@@ -88,6 +86,8 @@ function displayAllAlarms(){
             for(var i = 0; i < alarms.length; i++){
                 var alarm = alarms[i];
                 alarm.days = JSON.parse(alarm.days);
+
+                console.log(alarm.alarm_time);
 
                 var newAlarm = $('<tr id=alarm_' + alarm.id + '>');
                 newAlarm.append($('<td>' + alarm.id +'</td>'));
@@ -121,7 +121,7 @@ function displayAllAlarms(){
                 var toggleOnOffButton = $('<button class="btn btn-xs"></button>');
                 toggleOnOffButton.attr('id', 'toggle-' + alarm.id);
 
-                if(alarm.is_on) {
+                if(alarm.enabled) {
                     toggleOnOffButton.addClass('btn-success');
                     toggleOnOffButton.html('ON');
                 } else {
@@ -140,6 +140,7 @@ function displayAllAlarms(){
                 // The delete button
                 var deleteButton = $('<button class="btn btn-danger btn-xs">DELETE</button>');
                 deleteButton.click(function(){
+                    // TODO: Fix this so that it does what the repeat button label does
                     deleteAlarm(alarm.id);
                 });
                 newAlarm.append($('<td/>').append(deleteButton));
