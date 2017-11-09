@@ -4,7 +4,7 @@ require 'json'
 
 require_relative '../lib/alarm_clock'
 
-# TODO: Finish these
+# TODO: Fix These
 
 ENV['RACK_ENV'] = 'test'
 

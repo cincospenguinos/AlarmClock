@@ -1,14 +1,13 @@
 require 'sinatra'
 require 'json'
-require 'byebug'
+require 'yaml'
 
 require_relative '../lib/alarm'
 require_relative '../lib/alarm_migration'
 
-ActiveRecord::Base.establish_connection(
-  adapter: 'sqlite3',
-  database: '.alarms.db'
-)
+db_config = YAML::load(File.open('db_config.yml'))
+
+ActiveRecord::Base.establish_connection(db_config)
 
 if !ActiveRecord::Base.connection.table_exists?(:alarms)
   AlarmMigration.new.up
@@ -118,6 +117,6 @@ put '/toggle' do
     alarm.enabled = !alarm.enabled
     alarm.save!
   end
-  
+
   send_response(true, {}, 'Toggled.')
 end
