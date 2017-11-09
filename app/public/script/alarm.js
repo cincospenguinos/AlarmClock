@@ -87,6 +87,7 @@ function displayAllAlarms(){
             // For each alarm
             for(var i = 0; i < alarms.length; i++){
                 var alarm = alarms[i];
+                alarm.days = JSON.parse(alarm.days);
 
                 var newAlarm = $('<tr>');
                 newAlarm.append($('<td>' + alarm.id +'</td>'));
@@ -99,7 +100,7 @@ function displayAllAlarms(){
                     var day = DAYS_OF_WEEK[j];
                     var repeatButtonLabel = $('<label/>', {"class":"btn btn-xs btn-default"});
 
-                    if(alarm.days.includes(day.toLowerCase())) {
+                    if(alarm.days.includes(day)) {
                         repeatButtonLabel.addClass('active');
                         repeatButtonLabel.html('<input type="checkbox" autocomplete="off" checked/>' + day);
                     } else

@@ -31,7 +31,7 @@ end
 
 ## Returns all the alarms
 get '/alarms' do
-  send_response(false, { alarms: Alarm.all }, '')
+  send_response(true, { alarms: Alarm.all }, '')
 end
 
 ## Add an alarm
@@ -43,12 +43,12 @@ post '/alarm' do
   end
 
   time = Time.parse(params['time'])
-  puts "---> #{time.inspect}"
 
   if days.size == 0
     send_response(false, {}, 'Must have multiple days')
   else
     alarm = Alarm.new(name: params['name'], alarm_time: time, days: days.to_json)
+
     if alarm.valid?
       alarm.save!
       send_response(true, { alarms: Alarm.all }, '')
@@ -61,14 +61,17 @@ end
 ## Toggle the alarm's repetitions
 put '/alarm' do
     # TODO: This
+  send_response(false, {}, 'Not implemented')
 end
 
 ## Remove an alarm
 delete '/alarm' do
   # TODO: This
+  send_response(false, {}, 'Not implemented')
 end
 
 ## Toggle an alarm's state
 put '/toggle' do
   # TODO: This
+  send_response(false, {}, 'Not implemented')
 end
